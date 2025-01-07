@@ -1,0 +1,27 @@
+---
+- name: Deploy VM on VMware using Morpheus Variables
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    vm_name: "{{ morpheus['customOptions']['vm_name'] }}"
+    vm_ip_address: "{{ morpheus['customOptions']['vm_ip_address'] }}"
+    vm_cpu: "{{ morpheus['customOptions']['vm_cpu'] }}"
+    vm_ram: "{{ morpheus['customOptions']['vm_ram'] }}"
+    vm_net: "{{ morpheus['customOptions']['vm_net'] }}"
+
+  tasks:
+    - name: Deploy a new VM on VMware
+      community.vmware.vmware_guest:
+        hostname: "{{ vm_hostname }}"
+        ip_address: "{{ vm_ip_address }}"
+        hardware:
+          num_cpus: "{{ vm_cpu_amount }}"
+          memory_mb: "{{ vm_ram_amount }}"
+        guest_id: ""
+        validate_certs: no
+      register: deploy_result
+
+    - name: Show deployment result
+      debug:
+        var: deploy_result
